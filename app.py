@@ -73,5 +73,91 @@ def get_mywords():
 def delete_mywords():
     return jsonify({'msg': '내 단어장에서 삭제되었습니다.'})
 
+
+
+
+
+
+
+//규진 (검증필요)
+
+@app.route('/list', methods=['GET'])
+def listing():
+    words = list(db.두유노우.find({}, {'_id': False}))
+    return jsonify({'all_words': words})
+
+
+@app.route('/api/post-mine', methods=['POST'])
+def saving():
+    url_receive = request.form['url_give']
+    english_receive = request.form['english_give']
+    korean_receive = request.form['korean_give']
+
+    doc = {
+        'url': url_receive,
+        'english': english_receive,
+        'korean': korean_receive
+    }
+    db.두유노우.insert_one(doc) // 저장위치를 두유노우로 잡으면 안되는것인가? 개인의 저장공간이 필요한가?
+    return jsonify({'msg': '내 단어장에 저장되었습니다.'})
+
+
+@app.route('/api/change', methods=['POST'])
+def changing():
+    url_receive = request.form['url_give']
+    english_receive = request.form['english_give']
+    korean_receive = request.form['korean_give']
+
+    doc = {
+        'url': url_receive,
+        'english': english_receive,
+        'korean': korean_receive
+    }
+    target_word = db.두유노우.find_one(doc)
+    current_word= target_word['url', 'english', 'korean']
+
+    db.두유노우.update_one({'name': 'bobby'}, {'$set': {'url': url_receive, 'english': english_receive, 'korean': korean_receive}})
+    return jsonify({'msg': '해당 글이 수정되었습니다.'})
+
+
+@app.route('/api/delete', methods=['POST'])
+def delete():
+    url_receive = request.form['url_give']
+    english_receive = request.form['english_give']
+    korean_receive = request.form['korean_give']
+
+    doc = {
+        'url': url_receive,
+        'english': english_receive,
+        'korean': korean_receive
+    }
+    target_word = db.두유노우.find_one(doc)
+    db.두유노우.delete_one({'target_word': target_word_receive})
+    return jsonify({'msg': '해당 글이 삭제 되었습니다.'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
