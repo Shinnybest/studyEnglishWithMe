@@ -162,7 +162,7 @@ def ewords():
 #     }
 #
 #     db.서버.insert_one(doc)
-
+#     return jsonify({'msg': '저장이 연결되었습니다!'})
 
 
 
