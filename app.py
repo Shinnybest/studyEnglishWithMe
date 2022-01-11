@@ -13,7 +13,6 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
 
-
 client = MongoClient('localhost', 27017)
 db = client.doyouknow
 
@@ -46,7 +45,7 @@ def mywords_page(username):
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         status = (username == payload["id"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
-        user_info = db.users.find_one({"username": username}, {"_id": False})
+        user_info = db.user.find_one({"username": username}, {"_id": False})
         return render_template('my-words.html', user_info=user_info, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
@@ -190,7 +189,7 @@ def sign_in():
     if result is not None:
         payload = {
             'id': username_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 1)
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 1 * 1)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
         return jsonify({'result': 'success', 'token': token})
