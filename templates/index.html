@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+
+    <title> 두유노우? | 메인리스트 </title>
+
+
+    <style>
+        .jumbotron {
+            width: 900px;
+            margin: auto;
+        }
+
+
+        .row {
+            width: 900px;
+            margin: auto;
+        }
+
+        .list-group {
+            background-color: darkslateblue;
+            width: 300px;
+
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            showWords();
+        });
+
+
+        function showWords() {
+            $.ajax({
+                type: "GET",
+                url: "/memo",
+                data: {},
+                success: function (response) {
+                    let mWords = response['all_words']
+                    for (let i = 0; i < mwords.length; i++) {
+
+                        // let image = mWords[i]['image']
+                        // let image = $('div').attr('class')
+                        // $("meta[property='og\\:image']").attr('class',img)
+
+                        let words = mWords[i]['url']
+
+
+                        let temp_html = `<li class="list-group-item">${words}</li>`
+                        $('#list').append(temp_html)
+
+                    }
+                }
+            })
+        }
+
+        function upload(){
+            window.location.href = "/" //업로드페이지로 가기
+        }
+
+    </script>
+
+
+</head>
+<body>
+<div class="jumbotron">
+    <h1 class="display-4">두유노우?</h1>
+    <p class="lead">메인페이지입니다.</p>
+    <hr class="my-4">
+    <p></p>
+    <p class="lead">
+        <a class="b" href="#">내 단어장</a> <a href=""> 로그아웃</a>
+    </p>
+    <a onclick="upload"  class="btn btn-outline-secondary" href="#" role="button">업로드!</a>
+</div>
+
+<div class="row gx-4 gx-lg-5 align-items-center my-5">
+    <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0"
+                               src="https://dummyimage.com/500x200/dee2e6/6c757d.jpg" alt="..."/></div>
+    <div class="col-lg-5"  id="list">
+        <ul class="list-group">
+            <li class="list-group-item">Apple</li>
+            <li class="list-group-item">Blue</li>
+            <li class="list-group-item">card</li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+</body>
