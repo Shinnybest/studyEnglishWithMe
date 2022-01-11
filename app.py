@@ -22,6 +22,7 @@ db = client.doyouknow
 def upload_page():
     return render_template('uploads.html')
 
+
 @app.route('/upload', methods=['POST'])
 def upload_words():
     url = request.form['url']
@@ -51,7 +52,6 @@ def mywords_page(username):
         return redirect(url_for("home"))
 
 
-
 @app.route('/my-words/<username>', methods=['GET'])
 def get_mywords():
     token_receive = request.cookies.get('mytoken')
@@ -60,8 +60,7 @@ def get_mywords():
         posts = list(db.posts.find({}).sort("date", -1))
         for post in posts:
             post["_id"] = str(post["_id"])
-            post["chosen_by_me"] = bool(db.
-                                        # 각 단어장에서 '나도 학습하기' 버튼 누른 데이터 저장된 mongodb collection 이름
+            post["chosen_by_me"] = bool(db
                                         .find_one({"post_id": post["_id"], "type": "heart", "username": payload['id']}))
         return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다."})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -75,12 +74,8 @@ def delete_mywords():
     return jsonify({'msg': '내 단어장에서 삭제되었습니다.'})
 
 
+# //규진 (검증필요)
 
-
-
-
-
-//규진 (검증필요)
 
 @app.route('/list', methods=['GET'])
 def listing():
@@ -99,7 +94,8 @@ def saving():
         'english': english_receive,
         'korean': korean_receive
     }
-    db.두유노우.insert_one(doc) // 저장위치를 두유노우로 잡으면 안되는것인가? 개인의 저장공간이 필요한가?
+    db.두유노우.insert_one(doc)
+    # // 저장위치를 두유노우로 잡으면 안되는것인가? 개인의 저장공간이 필요한가?
     return jsonify({'msg': '내 단어장에 저장되었습니다.'})
 
 
@@ -132,19 +128,19 @@ def delete():
         'english': english_receive,
         'korean': korean_receive
     }
-    target_word = db.두유노우.find_one(doc)
+    target_word_receive = db.두유노우.find_one(doc)
     db.두유노우.delete_one({'target_word': target_word_receive})
     return jsonify({'msg': '해당 글이 삭제 되었습니다.'})
 
 
-//예은
+# 예은
 @app.route('/api/list', methods=['GET'])
 def ewords():
-    mWords =  list(db.서버.find({}, {'_id':False}))
+    mWords =list(db.서버.find({}, {'_id':False}))
 
     return jsonify({'all_words': mWords})
 
-//확실치않아요ㅠㅠ
+# 확실치않아요ㅠㅠ
 # @app.route('/api/like', methods=['POST'])
 # def saving():
 #     url_receive = request.form['url_give']
@@ -166,7 +162,7 @@ def ewords():
 #     return jsonify({'msg': '저장이 연결되었습니다!'})
 
 
-//혁준
+# 혁준
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
@@ -222,18 +218,6 @@ def check_dup():
     username_receive = request.form['id_give']
     exists = bool(db.user.find_one({"id": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
