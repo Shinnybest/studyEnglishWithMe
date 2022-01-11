@@ -17,6 +17,7 @@ SECRET_KEY = 'SPARTA'
 client = MongoClient('localhost', 27017)
 db = client.doyouknow
 
+
 @app.route('/upload')
 def upload_page():
     return render_template('uploads.html')
@@ -165,10 +166,62 @@ def ewords():
 #     return jsonify({'msg': '저장이 연결되었습니다!'})
 
 
+//혁준
+@app.route('/')
+def home():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('index.html')
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
+@app.route('/login')
+def login():
+    msg = request.args.get("msg")
+    return render_template('login.html', msg=msg)
 
 
+@app.route('/sign_in', methods=['POST'])
+def sign_in():
+    username_receive = request.form['id']
+    password_receive = request.form['pw']
+    pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    result = db.user.find_one({'id': username_receive, 'pw': pw_hash})
+    if result is not None:
+        payload = {
+            'id': username_receive,
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 1)
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        return jsonify({'result': 'success', 'token': token})
+    else:
+        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
+
+@app.route('/register/save', methods=['POST'])
+def sign_up():
+    username_receive = request.form['id']
+    password_receive = request.form['pw']
+    password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    name_receive = request.form['name']
+    doc = {
+        "id": username_receive,
+        "pw": password_hash,
+        "name": name_receive
+    }
+    db.user.insert_one(doc)
+    return jsonify({'result': 'success'})
+
+
+@app.route('/register/check_dup', methods=['POST'])
+def check_dup():
+    username_receive = request.form['id_give']
+    exists = bool(db.user.find_one({"id": username_receive}))
+    return jsonify({'result': 'success', 'exists': exists})
 
 
 
