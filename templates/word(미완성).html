@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+
+    <title> 두유노우? | 단어장 </title>
+
+
+    <style type="text/css">
+        * {
+            font-family: "Stylish", sans-serif;
+        }
+
+        .wrap {
+            width: 900px;
+            margin: auto;
+        }
+
+
+        .full_width {
+
+            width: 50%;
+            margin: auto;
+        }
+
+        .half_width {
+
+            width: 40%;
+            margin: auto;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            showWords();
+        });
+
+        function showWords() {
+            $.ajax({
+                type: "GET",
+                url: "/list",
+                data: {},
+                success: function (response) {
+                    let words = response['all_words']
+                    for (let i = 0; i < words.length; i++) {
+                        let url = words[i]['url']
+                        let english = words[i]['english']
+                        let korean = words[i]['korean']
+
+                        let temp_html = `<div class="wrap">
+                                            <div class="jumbotron">
+                                                <A href="${url}"> URL로 연결 </A>
+                                                <P>
+                                            </div>
+                                        </div>
+
+
+                                        <div class=".wrap2">
+                                            <div class="full_width">
+                                                <div class="form-group row">
+
+                                                    <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+                                                    ${english}</div>
+                                                    <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+                                                    ${korean}</div>
+                                                </div>
+                                            </div>`
+                        $('#fun').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function memory() { //나도 학습하기! 버튼
+            $.ajax({
+                type: "POST",
+                url: "/api/post-mine",
+                data: {url_give: url, english_give: english, korean_give: korean},
+                success: function (response) { // 성공하면
+                    alert(response["msg"]);
+                    window.location.reload()
+                }
+            })
+        }
+
+function change() { //수정버튼
+    $.ajax({
+        type: "POST",
+        url: "/api/change",
+        data: {url_give: url, english_give: english, korean_give: korean},
+        success: function (response) { // 성공하면
+            alert(response["msg"]);
+            window.location.reload()
+        }
+    })
+}
+function del() { //삭제버튼
+            $.ajax({
+                type: 'POST',
+                url: '/api/delete',
+                data: {url_give: url, english_give: english, korean_give: korean},
+                success: function (response) {
+                    alert(response['msg']);
+                    window.location.reload();
+                }
+            });
+        }
+
+
+
+
+
+function post() {
+    let comment = $("#textarea-post").val()
+    let today = new Date().toISOString()
+    $.ajax({
+        type: "POST",
+        url: "/posting",
+        data: {
+            comment_give: comment,
+            date_give: today
+        },
+        success: function (response) {
+            $("#modal-post").removeClass("is-active")
+						window.location.reload()
+        }
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+</head>
+<body>
+<div class="wrap">
+    <div class="jumbotron">
+        <h1 class="display-4">단어장!</h1>
+        <p class="lead">영단어를 저장 또는 수정,삭제하는 공간입니다</p>
+        <hr class="my-4">
+        <p class="lead">
+        </p>
+    </div>
+</div>
+
+<div id="fun">
+    <div class="wrap">
+        <A href=""> URL로 연결 </A>
+        <P>
+    </div>
+
+    <div class="full_width">
+        <div class="form-group row">
+
+            <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+            </div>
+            <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="full_width">
+    <div class="form-group row">
+
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+        </div>
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+        </div>
+
+    </div>
+</div>
+
+<div class="full_width">
+    <div class="form-group row">
+
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+        </div>
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+        </div>
+
+    </div>
+</div>
+
+<div class="full_width">
+    <div class="form-group row">
+
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+        </div>
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+        </div>
+
+    </div>
+</div>
+
+<div class="full_width">
+    <div class="form-group row">
+
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+        </div>
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+        </div>
+
+    </div>
+</div>
+
+<div class="full_width">
+    <div class="form-group row">
+
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+        </div>
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+        </div>
+
+    </div>
+</div>
+
+<div class="full_width">
+    <div class="form-group row">
+
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+        </div>
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+        </div>
+
+    </div>
+</div>
+
+<div class="full_width">
+    <div class="form-group row">
+
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="단어">
+        </div>
+        <div class="half_width"><input type="text" class="form-control" id="inputPassword" placeholder="뜻">
+        </div>
+
+    </div>
+</div>
+
+<div class="full_width">
+    <button onclick="memory()" id="btn-post-box" type="button" class="btn btn-primary">나도 학습하기!</button>
+    <button onclick="change()" id="btn-post-box" type="button" class="btn btn-primary">수정</button>
+    <button onclick="del()" id="btn-post-box" type="button" class="btn btn-primary">삭제</button>
+</div>
+</div>
+</body>
+
+</html>
