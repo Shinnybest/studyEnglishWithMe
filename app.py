@@ -136,8 +136,32 @@ def delete():
     return jsonify({'msg': '해당 글이 삭제 되었습니다.'})
 
 
+//예은
+@app.route('/api/list', methods=['GET'])
+def ewords():
+    mWords =  list(db.서버.find({}, {'_id':False}))
 
+    return jsonify({'all_words': mWords})
 
+//확실치않아요ㅠㅠ
+# @app.route('/api/like', methods=['POST'])
+# def saving():
+#     url_receive = request.form['url_give']
+#
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+#     data = requests.get(url_receive, headers=headers)
+#
+#     soup = BeautifulSoup(data.text, 'html.parser')
+#
+#     image = soup.select_one('meta[property="og:image"]')['content']
+#
+#     doc = {
+#         'url' : url_receive,
+#         'image': image
+#     }
+#
+#     db.서버.insert_one(doc)
 
 
 
