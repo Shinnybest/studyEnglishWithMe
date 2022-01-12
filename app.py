@@ -29,6 +29,13 @@ def upload_words():
     url = request.form['url']
     english = request.form['english']
     korean = request.form['korean']
+    
+    english = english.replace('\"', '')
+    korean = korean.replace('\"', '')
+    english = english.replace('[', '')
+    korean = korean.replace('[', '')
+    english = english.replace(']', '')
+    korean = korean.replace(']', '')
 
     doc = {
         'url' : url,
