@@ -1,6 +1,8 @@
 import jwt
 import datetime
 import hashlib
+import requests
+from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
