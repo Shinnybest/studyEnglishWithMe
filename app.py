@@ -44,33 +44,35 @@ def mywords_page(username):
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         status = (username == payload["id"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
-
-        user_info = db.user.find_one({"username": username}, {"_id": False})
-        return render_template('my-words.html', user_info=user_info, status=status)
+        user_info = db.users.find_one({"username": username}, {"_id": False})
+        return render_template('my-words.html', user_info=user_info, status=status, username=username)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
 
-@app.route('/my-words/<username>', methods=['GET'])
+@app.route('/my-words', methods=['GET'])
 def get_mywords():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        posts = list(db.posts.find({}).sort("date", -1))
-        for post in posts:
-            post["_id"] = str(post["_id"])
-            post["chosen_by_me"] = bool(db
-                                        .find_one({"post_id": post["_id"], "type": "heart", "username": payload['id']}))
-        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다."})
+        user_info = db.users.find_one({"username": payload["id"]})
+        likes = list(db.likes.find({"username": user_info["username"]}).sort("date", -1))
+        posts = list(db.posts.find({"_id": likes["post_id"]}))
+        return jsonify({"result": "success", "msg": "내 단어장 목록입니다.", "all_likes" : likes, "all_posts": posts})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
-    return jsonify({'msg': '내 단어장 목록입니다.'})
 
-
-@app.route('/my-words/<username>/delete', methods=['POST'])
+@app.route('/my-words/delete', methods=['POST'])
 def delete_mywords():
-    return jsonify({'msg': '내 단어장에서 삭제되었습니다.'})
+    token_receive = request.cookies.get('mytoken')
+    try:
+        # 그 삭제하고 싶은 것의 고유 id 값을 브라우저에서 받아온다.
+        post_id_receive = request.args.get("post_id_give")
+        db.likes.delete_one({"post_id": post_id_receive})
+        return jsonify({"result": "success", "msg": "내 단어장에서 삭제되었습니다."})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 # //규진 (검증필요)
@@ -165,11 +167,9 @@ def ewords():
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
-    words = list(db.words.find({}, {'_id': False}))
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.user.find_one({'id': payload['id']})
-        return render_template('index.html', words=words, user_info=user_info)
+        return render_template('index.html')
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
