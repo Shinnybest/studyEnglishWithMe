@@ -135,33 +135,41 @@ def delete():
 
 
 # 예은
-@app.route('/api/list', methods=['GET'])
+@app.route('/list', methods=['GET'])
 def ewords():
-    mWords =list(db.서버.find({}, {'_id':False}))
+    mWords =list(db.post.find({}, {'_id':False}))
 
     return jsonify({'all_words': mWords})
 
-# 확실치않아요ㅠㅠ
-# @app.route('/api/like', methods=['POST'])
-# def saving():
-#     url_receive = request.form['url_give']
-#
-#     headers = {
-#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-#     data = requests.get(url_receive, headers=headers)
-#
-#     soup = BeautifulSoup(data.text, 'html.parser')
-#
-#     image = soup.select_one('meta[property="og:image"]')['content']
-#
-#     doc = {
-#         'url' : url_receive,
-#         'image': image
-#     }
-#
-#     db.서버.insert_one(doc)
-#     return jsonify({'msg': '저장이 연결되었습니다!'})
 
+@app.route('/upload')
+def upload_page():
+    return render_template('uploads.html')
+
+
+
+@app.route('/upload', methods=['POST'])
+def upload_words():
+    url = request.form['url']
+    english = request.form['english']
+    korean = request.form['korean']
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    data = requests.get(url, headers=headers)
+    soup = BeautifulSoup(data.text, 'html.parser')
+
+    image = soup.select_one('meta[property="og:image"]')['content']
+
+    doc = {
+        'url': url,
+        'english': english,
+        'korean': korean,
+        'image' : image
+    }
+
+    db.post.insert_one(doc)
+    return jsonify({'msg': '새 글이 업로드 되었습니다.'})
 
 # 혁준
 @app.route('/')
@@ -169,7 +177,7 @@ def home():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return render_template('main.html')
+        return render_template('index.html')
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
