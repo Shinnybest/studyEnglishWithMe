@@ -46,6 +46,26 @@
 
 
     </style>
+    <script>
+        function gotomywords(post_id) {
+            $.ajax({
+                    type: "POST",
+                    url: "/api/gotomywords",
+                    data: {post_id_give: post_id},
+                    success: function (response) {
+                        alert(response["msg"]);
+                        window.location.reload();
+
+                        }
+                })
+        }
+
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+    </script>
 </head>
 
 <body>
@@ -55,7 +75,7 @@
     <hr class="my-4">
     <p></p>
     <p class="lead">
-        <a class="b" href="#">내 단어장</a> <a href=""> 로그아웃</a>
+        <a class="b" href="/my-words/{{ username }}">내 단어장</a> <a onclick="sign_out()" href=""> 로그아웃</a>
     </p>
     <a onclick="window.location.href = '/upload'"  class="btn btn-outline-secondary" href="#" role="button">업로드!</a>
 </div>
