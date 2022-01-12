@@ -144,17 +144,9 @@ def delete():
 
 
 # 예은
-@app.route('/', methods=['GET'])
-def ewords():
-    mWords =list(db.posts.find({}, {'_id':False}))
-
-    return jsonify({'all_words': mWords})
-
-
 @app.route('/upload')
 def upload_page():
     return render_template('uploads.html')
-
 
 
 @app.route('/upload', methods=['POST'])
@@ -179,6 +171,24 @@ def upload_words():
 
     db.posts.insert_one(doc)
     return jsonify({'msg': '새 글이 업로드 되었습니다.'})
+
+
+# 메인페이지 보이기
+@app.route('/')
+def mhome():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({'id': payload['id']})
+        posts = list(db.posts.find({}))
+        for post in posts:
+            post["_id"] = str(post["_id"])
+        return render_template('main.html', username = user_info['id'], posts = posts)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
 
 # 혁준
 @app.route('/')
