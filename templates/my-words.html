@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
+<!doctype html>
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -11,56 +11,95 @@
 
     <!--bulma css-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-
-
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
-
-    <title> 두유노우 | 단어 업로드 </title>
-    <!-- font awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
-          integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-    <!--구글폰트-->
-    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 
+    <!--구글폰트-->
+    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+    <!--CSS-->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+
+
+    <title>두유노우? | 내단어장</title>
+    <script>
+        let username = '{{ username }}'
+        $(document).ready(function () {
+            get_mywords()
+        })
+
+        function get_mywords(username) {
+            $.ajax({
+                type: "GET",
+                url: `/my-words?username_give=${username}`,
+                data: {},
+                success: function (response) {
+                    if (response["result"] == 'success') {
+                        let user_likes = response["all_likes"]
+                        let all_posts = response["all_posts"]
+                        for (let i = 0; i < user_likes.length; i++) {
+                            let post_id = user_likes[i]['post_id']
+                            let english = all_posts[i]['english'].split(',')
+                            let korean = all_posts[i]['korean'].split(',')
+                            // image src를 넣는다
+                            let image = all_posts[i]['img']
+                            let temp_html = `<div class="card" id="${post_id}">
+                                                <img src="${image}" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                  <p class="card-text">${english}</p>
+                                                  <p class="card-text">${korean}</p>
+                                                </div>
+                                              </div>
+                                              <button onclick="delete_mywords('${post_id}')">학습 완료!</button>`
+                            $('.card-group').append(temp_html)
+                        }
+                    }
+                }
+            })
+        }
+
+        function delete_mywords(post_id) {
+            $.ajax({
+                type: "GET",
+                url: '/my-words/delete',
+                data: {post_id_give: post_id},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload();
+                }
+            })
+        }
+
+
+    </script>
 </head>
 <body>
 <h1>내 단어장</h1>
-<!--가로로 긴 단어장 형식 찾아야 함 우선 임시방편으로 cards 사용(부트스트랩)-->
 <div class="card-group">
-  <div class="card">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+                content. This content is a little bit longer.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
     </div>
-  </div>
-  <div class="card">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
     </div>
-  </div>
-  <div class="card">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    <div class="card">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+                content. This card has even longer content than the first to show that equal height action.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
     </div>
-  </div>
 </div>
 <!-- Optional JavaScript; choose one of the two! -->
 
