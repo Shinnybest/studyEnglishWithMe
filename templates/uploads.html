@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
           integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <!--구글폰트-->
-    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Jua:400" rel="stylesheet">
 
     <!-- CSS -->
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
@@ -72,7 +72,7 @@
                 url: "/upload",
                 data: {url: url, english: engArray, korean: korArray},
                 success: function (response) {
-                    alert(response["msg"]);
+                    alert("업로드 완료!");
                     window.location.reload();
                 }
             })
@@ -84,12 +84,53 @@
 
 
     </script>
+    <style>
+        * {
+            font-family: 'Jua', cursive;
+        }
+
+        .title {
+            font-size: 60px;
+        }
+
+        .body-wrap {
+            width: 900px;
+            margin: auto;
+            text-align: center;
+            font-size: larger;
+        }
+
+        #studyUrl {
+            margin-top: 20px;
+        }
+
+        .word-box {
+            margin: 20px;
+        }
+
+        .addBoxes {
+            background: none;
+            border: none;
+        }
+
+        .fa-plus-square {
+            color: #00d1b2;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<div class="banner-wrap">
-    <div class="banner" onclick="window.location.href = '/'">
+<section class="hero is-primary is-medium">
+    <div class="hero-body">
+        <p class="title">
+            업로드
+        </p>
+        <p class="subtitle">
+            오늘의 학습방법은? 오늘 배운 단어는?
+        </p>
     </div>
-</div>
+</section>
 <div class="body-wrap">
     <div>
         <form>
@@ -99,7 +140,7 @@
     <div class="word-box">
         <div class="word-row">
             <form>
-                <button onclick="addWords()"><i class="far fa-plus-square"></i></button>
+                <button class="addBoxes" onclick="addWords()"><i class="far fa-plus-square"></i></button>
                 <input id="english0" placeholder="영어 단어를 입력해주세요." type="text" required>
                 <input id="korean0" placeholder="한국어 뜻을 입력해주세요." type="text" required>
             </form>
