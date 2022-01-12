@@ -135,9 +135,9 @@ def delete():
 
 
 # 예은
-@app.route('/list', methods=['GET'])
+@app.route('/', methods=['GET'])
 def ewords():
-    mWords =list(db.post.find({}, {'_id':False}))
+    mWords =list(db.posts.find({}, {'_id':False}))
 
     return jsonify({'all_words': mWords})
 
@@ -168,7 +168,7 @@ def upload_words():
         'image' : image
     }
 
-    db.post.insert_one(doc)
+    db.posts.insert_one(doc)
     return jsonify({'msg': '새 글이 업로드 되었습니다.'})
 
 # 혁준
