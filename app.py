@@ -84,63 +84,66 @@ def delete_mywords():
         return redirect(url_for("home"))
 
 
-# //규진 (검증필요)
+
+
+# //규진(미완성)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 
 @app.route('/list', methods=['GET'])
 def listing():
-    words = list(db.두유노우.find({}, {'_id': False}))
+    words = db.words.find_one({유저가 클릭한 값의 posts....post_id는 아닌거 같은데 무슨 값을 넣어야 할까요}, {'_id': False})
     return jsonify({'all_words': words})
 
 
 @app.route('/api/post-mine', methods=['POST'])
 def saving():
-    url_receive = request.form['url_give']
-    english_receive = request.form['english_give']
-    korean_receive = request.form['korean_give']
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    post_id_receive = request.form['post_id_give']
 
     doc = {
-        'url': url_receive,
-        'english': english_receive,
-        'korean': korean_receive
+        "post_id": post_id_receive,
+        "username": payload["id"]
     }
-    db.두유노우.insert_one(doc)
-    # // 저장위치를 두유노우로 잡으면 안되는것인가? 개인의 저장공간이 필요한가?
-    return jsonify({'msg': '내 단어장에 저장되었습니다.'})
+        db.likes.insert_one(doc)
+        return jsonify({'msg': '내 단어장에 저장되었습니다.'})
+
 
 
 @app.route('/api/change', methods=['POST'])
+# 수정버튼은 전체적으로 조금 더 손 봐야합니다.
 def changing():
     url_receive = request.form['url_give']
     english_receive = request.form['english_give']
     korean_receive = request.form['korean_give']
-
     doc = {
         'url': url_receive,
         'english': english_receive,
         'korean': korean_receive
     }
-    target_word = db.두유노우.find_one(doc)
-    current_word= target_word['url', 'english', 'korean']
-
-    db.두유노우.update_one({'name': 'bobby'}, {'$set': {'url': url_receive, 'english': english_receive, 'korean': korean_receive}})
+    target_word = db.words.find_one(doc)
+    current_word = target_word['url', 'english', 'korean']
+    db.words.update_one({'name': 'bobby'},{'$set': {'url': url_receive, 'english': english_receive, 'korean': korean_receive}})
     return jsonify({'msg': '해당 글이 수정되었습니다.'})
 
 
 @app.route('/api/delete', methods=['POST'])
 def delete():
     url_receive = request.form['url_give']
-    english_receive = request.form['english_give']
-    korean_receive = request.form['korean_give']
+    # english_receive = request.form['english_give']
+    # korean_receive = request.form['korean_give']
 
-    doc = {
-        'url': url_receive,
-        'english': english_receive,
-        'korean': korean_receive
-    }
-    target_word_receive = db.두유노우.find_one(doc)
-    db.두유노우.delete_one({'target_word': target_word_receive})
+    db.posts.delete_one({'url': url_receive})
+    # , 'english': english_receive, 'korean': korean_receive})
     return jsonify({'msg': '해당 글이 삭제 되었습니다.'})
+
+
+if __name__ == '__main__':
+    app.run('0.0.0.0', port=5000, debug=True)
 
 
 # 예은
