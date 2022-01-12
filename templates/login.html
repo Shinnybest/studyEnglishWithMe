@@ -75,7 +75,7 @@
             let id = $("#input-id").val()
             let pw = $("#input-password").val()
             let password2 = $("#input-password2").val()
-            let nickname = $('#input-nickname').val()
+            let name = $('#input-name').val()
 
             if ($("#help-id").hasClass("is-danger")) {
                 alert("아이디를 다시 확인해주세요.")
@@ -113,7 +113,7 @@
                 data: {
                     id: id,
                     pw: pw,
-                    nickname: nickname
+                    name: name
                 },
                 success: function (response) {
                     alert("회원가입을 축하드립니다!")
@@ -148,7 +148,7 @@
                     pw: pw
                 },
                 success: function (response) {
-                    if (response['result'] == 'success') {
+                    if (response['result'] === 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         window.location.replace("/")
                     } else {
