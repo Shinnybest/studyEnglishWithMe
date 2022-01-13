@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <!--구글폰트-->
+    <link href="https://fonts.googleapis.com/css?family=Jua:400" rel="stylesheet">
+
+
     <script>
         function toggle_sign_up() {
             $("#sign-up-box").toggleClass("is-hidden")
@@ -159,6 +163,25 @@
         }
 
     </script>
+    <style>
+        * {
+            font-family: 'Jua', cursive;
+        }
+
+        .title {
+            font-size: 70px;
+        }
+
+        .subtitle {
+            font-size: 30px;
+            color: white;
+        }
+
+        .help {
+            font-size: 15px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <section class="hero is-primary">
@@ -167,16 +190,16 @@
                 두유노우?
             </p>
             <p class="subtitle">
-                단어장
+                친구와 함께 외우는 영어 단어장
             </p>
         </div>
     </section>
     <div class="box" style="max-width: 480px; margin: 100px auto auto auto;">
         <div class="field">
-            <label class="label ">ID</label>
+            <label class="label ">아이디</label>
             <div class="field has-addons">
                 <div class="control" style="width: 100%;">
-                    <input id="input-id" class="input" type="text" placeholder="Text input">
+                    <input id="input-id" class="input" type="text" placeholder="아이디">
                 </div>
                 <div class="control">
                     <a id="btn-check-dup" class="button is-info is-hidden" onclick="check_dup()">
@@ -189,26 +212,26 @@
         </div>
 
         <div id="password" class="field">
-            <label class="label">Password</label>
+            <label class="label">비밀번호</label>
             <div class="control">
-                <input id="input-password" class="input" type="password" placeholder="Text input">
+                <input id="input-password" class="input" type="password" placeholder="비밀번호">
             </div>
             <p id="help-password" class="help is-hidden">영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자</p>
             <p id="help-password-login" class="help"></p>
         </div>
 
         <div id="password2" class="field is-hidden">
-            <label class="label">Password</label>
+            <label class="label">비밀번호 재확인</label>
             <div class="control">
-                <input id="input-password2" class="input" type="password" placeholder="Text input">
+                <input id="input-password2" class="input" type="password" placeholder="비밀번호 재확인">
             </div>
-            <p id="help-password2" class="help is-hidden">비밀번호를 다시 입력해 주세요</p>
+            <p id="help-password2" class="help is-hidden">비밀번호를 다시 입력해주세요.</p>
         </div>
 
         <div id="name-box" class="field is-hidden">
-            <label class="label">name</label>
+            <label class="label">성함</label>
             <div class="control">
-                <input id="input-name" class="input" type="text" placeholder="Text input">
+                <input id="input-name" class="input" type="text" placeholder="성함">
             </div>
             <p id="help-name" class="help is-hidden"></p>
         </div>
@@ -220,7 +243,7 @@
                 </a>
             </p>
         </div>
-        <p id="help-register" class="help">회원가입을 하고 싶다면</p>
+        <p id="help-register" class="help">아직 계정이 없다면?</p>
         <div class="field is-grouped is-grouped-centered">
             <p class="control">
                 <a id='signup-box' class="button is-light" onclick="toggle_sign_up()">
