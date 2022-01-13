@@ -103,7 +103,12 @@ def home():
 # 업로드 페이지
 @app.route('/upload')
 def upload_page():
-    return render_template('uploads.html')
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('uploads.html')
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 # 업로드 DB에 넣기
 @app.route('/upload', methods=['POST'])
