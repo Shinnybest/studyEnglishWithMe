@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -20,51 +20,16 @@
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 
     <!--구글폰트-->
-    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Jua:400" rel="stylesheet">
     <!--CSS-->
     {#    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">#}
 
 
     <title>두유노우? | 내단어장</title>
     <script>
-        {#function show_mywords(username) {#}
-        {#    $.ajax({#}
-        {#        type: "GET",#}
-        {#        url: '/my-words?username_give=${username}',#}
-        {#        data: {},#}
-        {#        success: function (response) {#}
-        {#            let likeposts = response["likeposts"]#}
-        {#            for(let i=0; i<likeposts.length; i++) {#}
-        {#                let image = likeposts[i]["image"]#}
-        {#                let english = likeposts[i]["english"]#}
-        {#                let korean = likeposts[i]["korean"]#}
-        {#                let post_id = likeposts[i]["_id"]#}
-        {##}
-        {#                let temp_html = `<div class="row gx-4 gx-lg-5 align-items-center my-5" id="${post_id}">#}
-        {#                                    <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0"#}
-        {#                                                               src="${image}" alt="..."/>#}
-        {#                                    </div>#}
-        {#                                    <div class="col-lg-5" id="list">#}
-        {#                                        <ul class="list-group">#}
-        {#                                            <li class="list-group-item">${english}</li>#}
-        {#                                            <li class="list-group-item">${korean}</li>#}
-        {#                                        </ul>#}
-        {#                                    </div>#}
-        {#                                    <div>#}
-        {#                                        <button onclick="delete_mywords('${post_id}')">다 학습했어요!</button>#}
-        {#                                    </div>#}
-        {#                                </div>`#}
-        {##}
-        {#                $('#finally').append(temp_html)#}
-        {#            }#}
-        {#        }#}
-        {#    })#}
-
         $(document).ready(function () {
             get_mywords();
         });
-
-        {#get방식 가져오기 version 2#}
 
         function get_mywords(username) {
             $.ajax({
@@ -88,18 +53,18 @@
 
 
                             let temp_html1 = `<div class="row gx-4 gx-lg-5 align-items-center my-5" id="${post_id}">
-                                                <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0"
+                                                <div class="A col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0"
                                                                            src="${image}" alt="..."/>
                                                 </div>`
 
-                            let temp_html3 =  `<div>
-                                                    <button onclick="delete_mywords('${post_id}')">학습 완료!</button>
+                            let temp_html3 = `<div>
+                                                    <button class=" button is-primary" onclick="delete_mywords('${post_id}')">학습 완료!</button>
                                                 </div>
                                             </div>`
                             $('#finally').append(temp_html1)
                             let temp_html2 = ``
                             for (let j = 0; j < eng.length; j++) {
-                                temp_html2 = `<div class="col-lg-5" id="list">
+                                temp_html2 = `<div class="A col-lg-5" id="list">
                                                     <ul class="list-group">
                                                         <li class="list-group-item">${eng[j]}</li>
                                                         <li class="list-group-item">${kor[j]}</li>
@@ -129,30 +94,51 @@
 
 
     </script>
+
+    <style>
+        * {
+            font-family: 'Jua', cursive;
+        }
+
+        .title {
+            font-size: 60px;
+        }
+
+    </style>
+
 </head>
 <body>
-<h1>{{ username }}님의 단어장</h1>
-{#    {% for likepost in likeposts %}#}
-{#        {% set image = likepost[loop.index0].image %}#}
-{#        {% set english = likepost[loop.index0].english %}#}
-{#        {% set korean = likepost[loop.index0].korean %}#}
+<section class="hero is-primary is-medium">
+    <div class="hero-body">
+        <p class="title">
+            {{ username }}님의 단어장
+        </p>
+        <p class="subtitle">
+            오늘 당신이 학습할 내용은?
+        </p>
+        <p class="subtitle">
+            <a href="/">메인으로 돌아가기✌</a>
+        </p>
+    </div>
+</section>
 
 <div id="finally">
-
 </div>
-{#    {% endfor %}#}
 
-<!-- Optional JavaScript; choose one of the two! -->
+<!— Optional JavaScript; choose one of the two! —>
 
-<!-- Option 1: Bootstrap Bundle with Popper -->
+<!— Option 1: Bootstrap Bundle with Popper —>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 
-<!-- Option 2: Separate Popper and Bootstrap JS -->
-<!--
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
--->
+<!— Option 2: Separate Popper and Bootstrap JS —>
+<!—
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
 </body>
 </html>
