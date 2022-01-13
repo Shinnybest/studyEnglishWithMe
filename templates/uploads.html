@@ -22,7 +22,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 
-    <title> 두유노우? | 단어 업로드 </title>
+    <title> 두유노우 | 단어 업로드 </title>
     <!-- font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
           integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
@@ -36,10 +36,10 @@
         // 추가(+)버튼을 누를 때마다 아래에 input box가 한 행씩 추가되도록 했습니다.
         function addWords() {
             let temp_html = `<div class="word-row">
-            <button onclick="addWords()"><i class="far fa-plus-square"></i></button>
-            <input id="english" placeholder="영어 단어를 입력해주세요." type="text" required>
-            <input id="korean" placeholder="한국어 뜻을 입력해주세요." type="text" required>
-        </div>`
+                                <button class="addBoxes"  onclick="addWords()"><i class="far fa-plus-square"></i></button>
+                                <input id="english" placeholder="영어 단어를 입력해주세요." type="text" required>
+                                <input id="korean" placeholder="한국어 뜻을 입력해주세요." type="text" required>
+                            </div>`
             $('.word-box').append(temp_html)
 
             i = i + 1
@@ -113,6 +113,11 @@
             font-size: 15px;
             font-weight: bold;
         }
+        
+        .uploadBox {
+            background: none;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -145,7 +150,7 @@
         </div>
     </div>
     <div>
-        <button type="button" onclick="uploadWords()">업로드</button>
+        <button class="uploadBox" type="button" onclick="uploadWords()">업로드</button>
     </div>
 </div>
 
