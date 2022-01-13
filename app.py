@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
 from bson.objectid import ObjectId
+import json
 
 app = Flask(__name__)
 
@@ -16,7 +17,7 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@localhost', 27017)
 db = client.doyouknow
 
 # 메인페이지 보이기
@@ -29,7 +30,7 @@ def home():
         posts = list(db.posts.find({}))
         for post in posts:
             post["_id"] = str(post["_id"])
-        return render_template('main.html', username = user_info['id'], posts = posts)
+        return render_template('main.html', username = user_info['id'], posts=posts)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -207,20 +208,28 @@ def delete_mywords():
 #     return jsonify({'msg': '내 단어장에 저장되었습니다.'})
 
 @app.route('/api/change', methods=['POST'])
-# 수정버튼은 전체적으로 조금 더 손 봐야합니다.
 def changing():
     url_receive = request.form['url_give']
     english_receive = request.form['english_give']
     korean_receive = request.form['korean_give']
+    post_id_receive = request.form['post_id']
+
+    english = english_receive.replace('\"', '')
+    korean = korean_receive.replace('\"', '')
+    english = english.replace('[', '')
+    korean = korean.replace('[', '')
+    english = english.replace(']', '')
+    korean = korean.replace(']', '')
+
     doc = {
         'url': url_receive,
-        'english': english_receive,
-        'korean': korean_receive
+        'english': english,
+        'korean': korean
     }
-    target_word = db.words.find_one(doc)
-    current_word = target_word['url', 'english', 'korean']
-    db.words.update_one({'name': 'bobby'},{'$set': {'url': url_receive, 'english': english_receive, 'korean': korean_receive}})
+    db.posts.update_one({"_id": ObjectId(post_id_receive)},
+                        {'$set': doc})
     return jsonify({'msg': '해당 글이 수정되었습니다.'})
+
 
 @app.route('/api/delete', methods=['POST'])
 def delete():
