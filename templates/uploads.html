@@ -29,14 +29,11 @@
     <!--구글폰트-->
     <link href="https://fonts.googleapis.com/css?family=Jua:400" rel="stylesheet">
 
-    <!-- CSS -->
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-
-    <!-- JS -->
-    <!-- 자바스크립트 왜 static에 넣으면 이런 오류가 뜨는거지? -> undefined, maximum exceeded, 등 -->
     <script>
+        // 단어입력칸이 생성될 때마다 id값 뒤의 숫자가 하나씩 증가되게 하기 위해 우선 i의 변수값을 0으로 설정해 두었습니다
         let i = 0;
 
+        // 추가(+)버튼을 누를 때마다 아래에 input box가 한 행씩 추가되도록 했습니다.
         function addWords() {
             let temp_html = `<div class="word-row">
             <button onclick="addWords()"><i class="far fa-plus-square"></i></button>
@@ -46,24 +43,27 @@
             $('.word-box').append(temp_html)
 
             i = i + 1
+            // 여기서 i 값을 return한 이유는 그래야 아래 uploadWords() 함수에서 for문의 loop 횟수를 정해줄 수 있기 때문입니다.
             return $('#english').attr('id', `english${i}`), $('#korean').attr('id', `korean${i}`), i
         }
 
+        // 입력한 단어들을 서버에 넘겨줄 수 있도록 하는 함수
         function uploadWords() {
-
+            // 여러개의 값을 테이블에 하나의 값으로 넣어주기 위해서 미리 배열을 만들었다.
             let engArray = []
             let korArray = []
             let url = $('#studyUrl').val()
 
-            //변수를 이렇게 정하는 게 최선일까? 이렇게 정하니까 재사용하기 너무 어려움 ㅠㅠㅠ
             for (let a = 0; a < i + 1; a++) {
                 let englishword = $(`#english${a}`).val()
                 let koreanmeaning = $(`#korean${a}`).val()
 
+                // 각 input 박스에 들어가있는 값들을 배열에 넣어준다.
                 engArray.push(englishword)
                 korArray.push(koreanmeaning)
             }
 
+            //engArray, korArray 값이 자바스크립트 객체이기 때문에 서버에 넘겨주기 위해서는 Json형식으로 바꿔줘야 한다.
             engArray = JSON.stringify(engArray)
             korArray = JSON.stringify(korArray)
 
@@ -77,11 +77,6 @@
                 }
             })
         }
-        // 영어칸에는 영어만, 한글칸에는 한국어만 들어가도록 하기
-        // const engOnly = /^[a-zA-Z]*$/;
-        // const korOnly = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
-        // const engNum = /^[a-zA-Z0-9]*$/;
-
 
     </script>
     <style>
@@ -159,12 +154,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-
-<!-- Option 2: Separate Popper and Bootstrap JS -->
-<!--
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
--->
 
 </body>
 </html>
