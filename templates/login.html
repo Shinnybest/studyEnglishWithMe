@@ -33,29 +33,39 @@
 
         }
 
+        //id가 규칙에 맞는지 확인
         function is_id(id) {
             let lang = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
             return lang.test(id)
         }
 
+        //pw가 규칙에 맞는지 확인
         function is_password(pw) {
             let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
             return regExp.test(pw);
         }
 
+        //id 중복확인
         function check_dup() {
+
+            //id입력값을 받고
             let id = $("#input-id").val()
 
+            //id칸에 아무것도 입력하지 않을때,
             if (id == "") {
                 $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
                 $("#input-id").focus()
                 return;
             }
+
+            //id가 형식과 맞지 않을때
             if (!is_id(id)) {
                 $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe")
                 $("#input-id").focus()
                 return;
             }
+
+            //db에서 id값 비교해서 확인하기
             $("#help-id").addClass("is-loading")
             $.ajax({
                 type: "POST",
@@ -64,9 +74,13 @@
                     id_give: id
                 },
                 success: function (response) {
+
+                    //id가 이미 존재하면,
                     if (response["exists"]) {
                         $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
                         $("#input-id").focus()
+
+                    //id가 존재하지 않으면 ( id중복확인 통과하면 , id에 is-success클래스를 추가)
                     } else {
                         $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
                     }
@@ -75,12 +89,14 @@
             });
         }
 
+        //회원가입
         function sign_up() {
             let id = $("#input-id").val()
             let pw = $("#input-password").val()
             let password2 = $("#input-password2").val()
             let name = $('#input-name').val()
 
+            //id 중복 확인
             if ($("#help-id").hasClass("is-danger")) {
                 alert("아이디를 다시 확인해주세요.")
                 return;
@@ -89,10 +105,13 @@
                 return;
             }
 
+            //pw가 빈칸인지 확인
             if (pw == "") {
                 $("#help-password").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
                 $("#input-password").focus()
                 return;
+
+            //pw가 형식에 맞는지 확인
             } else if (!is_password(pw)) {
                 $("#help-password").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자").removeClass("is-safe").addClass("is-danger")
                 $("#input-password").focus()
@@ -100,10 +119,14 @@
             } else {
                 $("#help-password").text("사용할 수 있는 비밀번호입니다.").removeClass("is-danger").addClass("is-success")
             }
+
+            //pw2가 빈칸인지 확인
             if (password2 == "") {
                 $("#help-password2").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
                 $("#input-password2").focus()
                 return;
+
+            //pw2 와 pw 가 같은지 확인
             } else if (password2 != pw) {
                 $("#help-password2").text("비밀번호가 일치하지 않습니다.").removeClass("is-safe").addClass("is-danger")
                 $("#input-password2").focus()
@@ -111,6 +134,8 @@
             } else {
                 $("#help-password2").text("비밀번호가 일치합니다.").removeClass("is-danger").addClass("is-success")
             }
+
+            //서버로 id,pw,name 을 보내준다.
             $.ajax({
                 type: "POST",
                 url: "/register/save",
@@ -144,6 +169,8 @@
             } else {
                 $("#help-password-login").text("")
             }
+
+            {#id,pw 데이터를 서버에 보내주기#}
             $.ajax({
                 type: "POST",
                 url: "/sign_in",
@@ -151,11 +178,13 @@
                     id: id,
                     pw: pw
                 },
+                {#로그인이 정상적으로 되면,mytoken으로 쿠키에 저장후 메인으로 돌아가기 #}
                 success: function (response) {
                     if (response['result'] === 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         window.location.replace("/")
                     } else {
+                        //로그인 안되면 메시지 띄우기
                         alert(response['msg'])
                     }
                 }
