@@ -21,9 +21,10 @@
 
 
     <title> 두유노우? | 메인리스트 </title>
+
     <script>
 
-
+        {#내단어장으로 데이터 전달하기#}
         function gotomywords(post_id) {
             $.ajax({
                 type: "POST",
@@ -37,10 +38,8 @@
             })
         }
 
+        {#모달창 내용 수정기능#}
         function change(post_id, id) {
-
-            {#let i = document.getElementsByName("tag").length;#}
-
 
             let ele = document.getElementById(id);
             console.log(ele)
@@ -80,6 +79,7 @@
             })
         }
 
+        {#모달창 내용삭제 기능#}
         function del(post_id) {
             $.ajax({
                 type: "POST",
@@ -93,9 +93,12 @@
             })
         }
 
+        {#로그아웃기능#}
         function sign_out() {
             $.removeCookie('mytoken', {path: '/'});
             alert('로그아웃!')
+
+            {#로그인화면으로 돌아가기#}
             window.location.href = "/login"
         }
     </script>
@@ -139,52 +142,67 @@
 
 </head>
 <body>
+{#// 내 단어장, 로그아웃, 업로드버튼 #}
 <section class="hero is-primary is-medium">
     <div class="hero-body">
         <p class="title">
             두유노우?
         </p>
+{#        #내단어장으로 이동, 클릭시 로그아웃#}
         <p class="subtitle">
             <a class="b" href="/my-words/{{ username }}">내 단어장</a> <a onclick="sign_out()" href=""> 로그아웃</a>
         </p>
+{#        #버튼 클릭시 업로드 페이지로 이동#}
         <a onclick="window.location.href = '/upload'" class="btn btn-outline-secondary" role="button">업로드!</a>
     </div>
 </section>
 
-
+{#//메인화면으로 image,영어단어, 뜻, id 데이터 가져오기 #}
 {% for post in posts %}
     {% set image = post.image %}
     {% set english = post.english %}
     {% set korean = post.korean %}
     {% set post_id = post._id %}
+
+{#    #id마다 단어박스에 모달창 띄우기 기능넣기#}
     <div class="row gx-4 gx-lg-5 align-items-center my-5"
          onclick='$("#{{ post_id }}").addClass("is-active")' id="wordBox">
+
+{#        단어박스에 image가져오기#}
         <div class="col-lg-7">
             <img id="image_url" class="img-fluid rounded mb-4 mb-lg-0" src="{{ image }}"/>
         </div>
-        {# {% for j in range(post['english'].split(',')|length) %}#}
+
+{#        단어박스에 영어단어, 뜻 가져오기#}
         <div class="col-lg-5" id="list">
             <ul class="list-group">
                 <li class="list-group-item">{{ post['english'].split(',')[0] }}</li>
                 <li class="list-group-item">{{ post['korean'].split(',')[0] }}</li>
             </ul>
+
+{#            화면의 단어박스를 클릭하면 모달창 띄를기#}
             <span>더 많은 단어가 궁금하면 클릭!👌</span>
         </div>
-        {# {% endfor %}#}
     </div>
+
     <section>
         <div class="modal" id="{{ post_id }}">
+
+{#        모달창 배경클릭시 모달창 숨기기#}
             <div class="modal-background" onclick='$("#{{ post_id }}").removeClass("is-active")'></div>
             <div class="modal-content">
                 <div class="box">
                     <article class="media">
                         <div class="media-content">
                             <div class="field">
+
+{#                            모달창에 이미지가져오기#}
                                 <div class="row gx-4 gx-lg-5 align-items-center my-5">
                                     <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0"
                                                                src="{{ image }}" alt="..."/>
                                     </div>
 
+{#                                모달창에 단어목록 가져오기#}
                                         <div class="col-lg-5" id="{{ post_id|reverse }}">
                                             {% for j in range(post['english'].split(',')|length) %}
                                                 <ul class="list-group">
@@ -199,9 +217,8 @@
                                 </div>
                             </div>
                             <nav class="level is-mobile">
-                                <div class="level-left">
 
-                                </div>
+{#                                모달창 버튼(나도 학습하기,수정,게시글 삭제하기,취소)#}
                                 <div class="level-right">
                                     <div class="level-item">
                                         <a class="button is-sparta" onclick="gotomywords('{{ post_id }}')">나도 학습하기!</a>
@@ -222,6 +239,8 @@
                     </article>
                 </div>
             </div>
+
+{#        모달창 닫기 버튼#}
             <button class="modal-close is-large" aria-label="close"
                     onclick='$("#{{ post_id }}").removeClass("is-active")'></button>
         </div>
