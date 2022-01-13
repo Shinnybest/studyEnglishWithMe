@@ -20,6 +20,7 @@
 
 
     <script>
+        //로그인 회원가입 창 전환 함수
         function toggle_sign_up() {
             $("#sign-up-box").toggleClass("is-hidden")
             $(".help").toggleClass("is-hidden")
@@ -35,13 +36,13 @@
 
         //id가 규칙에 맞는지 확인
         function is_id(id) {
-            let lang = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
+            let lang = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;  //정규표현식을 사용하 지정된 문자들과 2~10의 길이의 id가 맞는지 확인
             return lang.test(id)
         }
 
         //pw가 규칙에 맞는지 확인
         function is_password(pw) {
-            let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;      //정규표현식에 의해 지정된 문자들과 8~20의 길이의 id가 맞는지 확인
             return regExp.test(pw);
         }
 
@@ -151,7 +152,7 @@
             });
 
         }
-
+        //로그인 
         function sign_in() {
             let id = $("#input-id").val()
             let pw = $("#input-password").val()
