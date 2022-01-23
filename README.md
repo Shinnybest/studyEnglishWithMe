@@ -46,4 +46,4 @@ https://youtu.be/cgFmKRZut84
  - Bulma를 사용하여 모달 기능을 구현했습니다.
 
 ## 6. 회고록 (개인별 블로그 주소 올릴 예정입니다 :))
-이규진 : https://rbwls44.tistory.com/20
+이규진 : https://rbwls44.tistory.com/20 , https://rbwls44.tistory.com/5?category=1018563
