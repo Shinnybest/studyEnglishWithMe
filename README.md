@@ -47,3 +47,4 @@ https://youtu.be/cgFmKRZut84
 
 ## 6. 회고록
 개인별 블로그 주소 올릴 예정입니다 :)
+이규진 : https://rbwls44.tistory.com/20
